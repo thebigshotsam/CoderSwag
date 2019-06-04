@@ -12,10 +12,10 @@ import com.thebigshot_developers.saksham.coderswag.R
 import com.thebigshot_developers.saksham.coderswag.model.cateogary
 import java.util.*
 
-class CategoryRecycleAdapter(val context: Context, val categories:List<cateogary>):RecyclerView.Adapter<CategoryRecycleAdapter.Holder> (){
+class CategoryRecycleAdapter(val context: Context, val categories:List<cateogary>,val itemClick:(cateogary)->Unit):RecyclerView.Adapter<CategoryRecycleAdapter.Holder> (){
     override fun onCreateViewHolder(p0: ViewGroup, position: Int): Holder {
       val view=LayoutInflater.from(context).inflate(com.thebigshot_developers.saksham.coderswag.R.layout.category_list_item_view, null)
-        return Holder(view)
+        return Holder(view,itemClick)
     }
 
     override fun getItemCount(): Int {
@@ -26,13 +26,14 @@ class CategoryRecycleAdapter(val context: Context, val categories:List<cateogary
         holder?.bindCategory(categories[position],context)
     }
 
-    inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class Holder(itemView: View,val itemClick:(cateogary)->Unit): RecyclerView.ViewHolder(itemView){
         val categoryImage=itemView?.findViewById<ImageView>(R.id.categoryimage)
         val categoryName=itemView?.findViewById<TextView>(R.id.categoryname)
         fun bindCategory(category:cateogary,context:Context){
             val resourceId = context.resources.getIdentifier(category.Image, "drawable", context.packageName)
             categoryImage?.setImageResource(resourceId)
             categoryName?.text=category.title
+            itemView.setOnClickListener{itemClick(category)}
         }
     }
 }
